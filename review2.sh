@@ -1,5 +1,7 @@
+#!/bin/bash
 echo "enter a number"
 read n
+
 if [[ $n -ge 100 && $n -le 999 ]]
 then
    echo "3 digit num:$n"
@@ -7,32 +9,41 @@ else
    echo "not a 3 digit"
 fi
 
+declare -A count=([even]=0 [odd]=0)
+
+
 primefact(){
-for (( i=2;i<=$n*$n; i++ ))
-do
+ for (( i=2;n>1; i++ ))
+ do
     while [ $((n%i)) == 0 ]
     do
-        echo "Prime factors are:$i"
-        n=$((n/$i))
-        primearray[$i]=$((i))
+        n=$(($n/$i))
+       primearray[i]=$(($i))
     done
 done
-echo "Array of prime factors: ${primearray[@]}"
 }
 primefact $n
+echo "Array of prime factors: ${primearray[@]}"
 
 
 checkevenodd(){
-rem=$(( $n % 2 ))
- 
-if [ $rem -eq 0 ]
-then
-  echo "$n is even number:evenarr[$]=$((n))"
-else
-  echo "$n is odd number"
-fi
+
+  for i in "${primearray[@]}"
+  do
+     if [ $((i%2)) -eq 0 ]
+     then
+        arreven[$i]=$((i))
+        ((count[even]++))
+     else
+        arrodd[$i]=$((i))
+        ((count[odd]++))
+     fi
+ done
 }
-checkevenodd $n
+checkevenodd $i
+echo "Array even:${arreven[@]}"
+echo "Array odd: ${arrodd[@]}"
+
 
 checkpalindrome(){
 s=0
@@ -55,3 +66,8 @@ echo "CHECK FOR PALINDROME "
 echo "Enter a number"
 read n
 checkpalindrome $n
+
+
+echo "KEYS: ${!count[@]}"
+echo "COUNT: ${count[@]}"
+
